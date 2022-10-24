@@ -149,6 +149,18 @@ defmodule Tailwind do
   end
 
   @doc """
+  Returns the base url to the downloadable executables.
+
+  """
+  def base_url do
+    Application.get_env(
+      :tailwind,
+      :base_url,
+      "https://github.com/tailwindlabs/tailwindcss/releases/download"
+    )
+  end
+
+  @doc """
   Returns the path to the executable.
 
   The executable may not be available if it was not yet installed.
@@ -224,7 +236,7 @@ defmodule Tailwind do
   def install do
     version = configured_version()
     name = "tailwindcss-#{target()}"
-    url = "https://github.com/tailwindlabs/tailwindcss/releases/download/v#{version}/#{name}"
+    url = Path.join(base_url(), "v#{version}/#{name}")
     bin_path = bin_path()
     tailwind_config_path = Path.expand("assets/tailwind.config.js")
     binary = fetch_body!(url)
